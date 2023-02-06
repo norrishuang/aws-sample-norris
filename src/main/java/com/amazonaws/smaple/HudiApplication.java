@@ -94,22 +94,22 @@ public class HudiApplication {
 			Configuration configuration = streamTableEnvironment.getConfig().getConfiguration();
 			configuration.setString("execution.checkpointing.interval", "1 min");
 
-			final String createTableStmt = "CREATE TABLE IF NOT EXISTS CustomerTable (\n" +
-					"  `event_time` TIMESTAMP(3) METADATA FROM 'value.source.timestamp' VIRTUAL,  -- from Debezium format\n" +
-					"  `origin_table` STRING METADATA FROM 'value.source.table' VIRTUAL, -- from Debezium format\n" +
-					"  `record_time` TIMESTAMP(3) METADATA FROM 'value.ingestion-timestamp' VIRTUAL,\n" +
-					"  `CUST_ID` BIGINT,\n" +
-					"  `NAME` STRING,\n" +
-					"  `MKTSEGMENT` STRING,\n" +
-					"   WATERMARK FOR event_time AS event_time\n" +
-					") WITH (\n" +
-					"  'connector' = 'kafka',\n" +
-					"  'topic' = '"+ kafkaTopic +"',\n" +
-					"  'properties.bootstrap.servers' = '"+  kafkaProperties.get("bootstrap.servers") +"',\n" +
-					"  'properties.group.id' = 'kdaConsumerGroup',\n" +
-					"  'scan.startup.mode' = 'earliest-offset',\n" +
-					"  'value.format' = 'debezium-json'\n" +
-					")";
+//			final String createTableStmt = "CREATE TABLE IF NOT EXISTS CustomerTable (\n" +
+//					"  `event_time` TIMESTAMP(3) METADATA FROM 'value.source.timestamp' VIRTUAL,  -- from Debezium format\n" +
+//					"  `origin_table` STRING METADATA FROM 'value.source.table' VIRTUAL, -- from Debezium format\n" +
+//					"  `record_time` TIMESTAMP(3) METADATA FROM 'value.ingestion-timestamp' VIRTUAL,\n" +
+//					"  `CUST_ID` BIGINT,\n" +
+//					"  `NAME` STRING,\n" +
+//					"  `MKTSEGMENT` STRING,\n" +
+//					"   WATERMARK FOR event_time AS event_time\n" +
+//					") WITH (\n" +
+//					"  'connector' = 'kafka',\n" +
+//					"  'topic' = '"+ kafkaTopic +"',\n" +
+//					"  'properties.bootstrap.servers' = '"+  kafkaProperties.get("bootstrap.servers") +"',\n" +
+//					"  'properties.group.id' = 'kdaConsumerGroup',\n" +
+//					"  'scan.startup.mode' = 'earliest-offset',\n" +
+//					"  'value.format' = 'debezium-json'\n" +
+//					")";
 
 			final String sinkKafkaDDL = String.format("CREATE TABLE kafka_portfolio (\n" +
 					"        id INT,\n" +
@@ -120,8 +120,8 @@ public class HudiApplication {
 					"        offer_type STRING,\n" +
 					"        offer_id STRING,\n" +
 					"        modify_time STRING,\n" +
-					"        create_time STRING,\n" +
-					"     PRIMARY KEY (id) NOT ENFORCED\n" +
+					"        create_time STRING\n" +
+//					"     PRIMARY KEY (id) NOT ENFORCED\n" +
 					") with (\n" +
 					"    'connector' = 'kafka',\n" +
 					"    'topic' = 'pg_portfolio',\n" +
@@ -131,8 +131,7 @@ public class HudiApplication {
 					"     'properties.sasl.mechanism' = 'software.amazon.msk.auth.iam.IAMLoginModule required;',\n"  +
 					"     'properties.sasl.client.callback.handler.class' = 'software.amazon.msk.auth.iam.IAMClientCallbackHandler',\n"  +
 //                " 'format' = 'changelog-json'\n" +
-					" 'value.format' = 'json'," +
-					" 'key.format' = 'json'" +
+					" 	  'value.format' = 'debezium-json'" +
 					")", kafkaProperties.get("bootstrap.servers"));
 
 			final String s3Sink = "CREATE TABLE CustomerHudi (\n" +

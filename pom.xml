@@ -150,7 +150,7 @@
       <artifactId>kryo-shaded</artifactId>
       <version>4.0.2</version>
     </dependency>
-    <!-- Hive Sync -->
+    <!-- Hive Sync
     <dependency>
       <groupId>org.apache.hive</groupId>
       <artifactId>hive-common</artifactId>
@@ -160,12 +160,18 @@
       <groupId>org.apache.hive</groupId>
       <artifactId>hive-exec</artifactId>
       <version>3.1.3</version>
+      <exclusions>
+      <exclusion>
+        <groupId>org.apache.calcite.avatica</groupId>
+        <artifactId>avatica-core</artifactId>
+      </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-mapreduce-client-core</artifactId>
       <version>3.3.2</version>
-    </dependency>
+    </dependency>-->
 
     <dependency>
       <groupId>software.amazon.msk</groupId>

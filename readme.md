@@ -1,14 +1,12 @@
 ### Flink CDC & Import Data to Hudi With KDA
 
+[TOC]
 
-
-​    该样例分两个场景的代码。
-
-
+### 代码说明：
 
 #### FlinkCDCPostgres
 
-通过FlinkCDC实时采集Postgresql的数据，写入Kafka
+通过FlinkCDC实时采集Postgresql的数据，写入Kafka。
 
 
 
@@ -24,11 +22,11 @@
 
 3. **Runtime properties** 配置如下
 
-   | Group                      | **Key**     | **Value**                                                    |
-   | -------------------------- | ----------- | ------------------------------------------------------------ |
-   | FlinkApplicationProperties | brokers     | boot-ynbycbm6.c1.kafka-serverless.us-east-1.amazonaws.com:9098 |
-   | FlinkApplicationProperties | kafka-topic | 需要消费的topic name                                         |
-   | FlinkApplicationProperties | s3Path      | Hudi写入的S3目录                                             |
+   | Group                      | **Key**     | **Value**            |
+   | -------------------------- | ----------- | -------------------- |
+   | FlinkApplicationProperties | brokers     | MSK Boostrap Server  |
+   | FlinkApplicationProperties | kafka-topic | 需要消费的topic name |
+   | FlinkApplicationProperties | s3Path      | Hudi写入的S3目录     |
 
    
 
