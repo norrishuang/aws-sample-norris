@@ -12,7 +12,7 @@
 
 #### HuidApplication
 
-消费Kafka的数据，以Hudi格式写入S3。Kafka 使用 MSK Severless，因此需要IAM认证。
+消费Kafka的数据，以Hudi格式写入S3。MSK 先用无认证的模式。
 
 **执行：**
 

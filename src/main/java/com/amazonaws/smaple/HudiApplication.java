@@ -121,18 +121,16 @@ public class HudiApplication {
 					"        offer_id STRING,\n" +
 					"        modify_time STRING,\n" +
 					"        create_time STRING\n" +
-//					"     PRIMARY KEY (id) NOT ENFORCED\n" +
 					") with (\n" +
 					"    'connector' = 'kafka',\n" +
-					"    'topic' = 'pg_portfolio',\n" +
+					"    'topic' = '%s',\n" +
 					"    'properties.bootstrap.servers' = '%s',\n" +
 					"    'properties.group.id' = 'kafka_portfolio_pg_json_gid_001',\n" +
-					"     'properties.security.protocol' = 'SASL_SSL',\n"  +
-					"     'properties.sasl.mechanism' = 'software.amazon.msk.auth.iam.IAMLoginModule required;',\n"  +
-					"     'properties.sasl.client.callback.handler.class' = 'software.amazon.msk.auth.iam.IAMClientCallbackHandler',\n"  +
-//                " 'format' = 'changelog-json'\n" +
+//					"     'properties.security.protocol' = 'SASL_SSL',\n"  +
+//					"     'properties.sasl.mechanism' = 'software.amazon.msk.auth.iam.IAMLoginModule required;',\n"  +
+//					"     'properties.sasl.client.callback.handler.class' = 'software.amazon.msk.auth.iam.IAMClientCallbackHandler',\n"  +
 					" 	  'value.format' = 'debezium-json'" +
-					")", kafkaProperties.get("bootstrap.servers"));
+					")", kafkaTopic, kafkaProperties.get("bootstrap.servers"));
 
 			final String s3Sink = "CREATE TABLE CustomerHudi (\n" +
 					"        id INT,\n" +
@@ -148,7 +146,7 @@ public class HudiApplication {
 					"    ) PARTITIONED BY (`reward`)\n" +
 					"    WITH (\n" +
 					"    'connector' = 'hudi',\n" +
-					"    'compaction.tasks'='2',\n" +
+					"    'compaction.tasks'='1',\n" +
 					"    'changelog.enabled'='true',\n" +
 					"    'read.streaming.enabled' = 'true',\n" +
 					"    'read.streaming.skip_compaction' = 'true',\n" +
@@ -159,7 +157,7 @@ public class HudiApplication {
 					"    'compaction.trigger.strategy'='num_or_time',\n" +
 					"    'compaction.max_memory'='2048',\n" +
 					"    'write.merge.max_memory'='1024',\n" +
-					"    'write.tasks' = '4',\n" +
+					"    'write.tasks' = '1',\n" +
 					"    'hive_sync.enable' = 'true',\n" +
 					"    'hive_sync.db' = 'hudi',\n" +
 					"    'hive_sync.table' = 'customer_hudi_auto',\n" +

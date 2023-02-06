@@ -71,9 +71,9 @@ public class FlinkCDCPorstgres {
                 "    'topic' = 'pg_portfolio',\n" +
                 "    'properties.bootstrap.servers' = '%s',\n" +
                 "    'properties.group.id' = 'kafka_portfolio_pg_json_gid_001',\n" +
-                "     'kafka.security.protocol' = 'SASL_SSL',\n"  +
-                "     'kafka.sasl.mechanism' = 'software.amazon.msk.auth.iam.IAMLoginModule required;',\n"  +
-                "     'kafka.sasl.client.callback.handler.class' = 'software.amazon.msk.auth.iam.IAMClientCallbackHandler',\n"  +
+//                "     'kafka.security.protocol' = 'SASL_SSL',\n"  +
+//                "     'kafka.sasl.mechanism' = 'software.amazon.msk.auth.iam.IAMLoginModule required;',\n"  +
+//                "     'kafka.sasl.client.callback.handler.class' = 'software.amazon.msk.auth.iam.IAMClientCallbackHandler',\n"  +
 //                " 'format' = 'changelog-json'\n" +
                 " 'format' = 'debezium-json',\n" +
                 " 'debezium-json.ignore-parse-errors'='true'\n" +
