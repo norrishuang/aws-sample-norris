@@ -16,7 +16,6 @@ public class FlinkCDCPorstgres {
     public static void main(String[] args) {
         //设置flink表环境变量
         EnvironmentSettings fsSettings = EnvironmentSettings.newInstance()
-                .useBlinkPlanner()
                 .inStreamingMode()
                 .build();
 
@@ -47,7 +46,7 @@ public class FlinkCDCPorstgres {
                         " 'hostname' = 'database-1.cghfgy0zyjlk.us-east-1.rds.amazonaws.com',\n" +
                         " 'port' = '5432',\n" +
                         " 'username' = 'postgres',\n" +
-                        " 'password' = 'Amazon123',\n" +
+                        " 'password' = 'nakYK2fV',\n" +
                         " 'database-name' = 'norrisdb',\n" +
                         " 'schema-name' = 'public',\n" +
                         " 'decoding.plugin.name' = 'pgoutput',\n" +
@@ -72,7 +71,12 @@ public class FlinkCDCPorstgres {
                 "    'topic' = 'pg_portfolio',\n" +
                 "    'properties.bootstrap.servers' = '%s',\n" +
                 "    'properties.group.id' = 'kafka_portfolio_pg_json_gid_001',\n" +
-                " 'format' = 'changelog-json'\n" +
+                "     'kafka.security.protocol' = 'SASL_SSL',\n"  +
+                "     'kafka.sasl.mechanism' = 'software.amazon.msk.auth.iam.IAMLoginModule required;',\n"  +
+                "     'kafka.sasl.client.callback.handler.class' = 'software.amazon.msk.auth.iam.IAMClientCallbackHandler',\n"  +
+//                " 'format' = 'changelog-json'\n" +
+                " 'format' = 'debezium-json',\n" +
+                " 'debezium-json.ignore-parse-errors'='true'\n" +
                 ")",strKafkaBostrap);
 
 
