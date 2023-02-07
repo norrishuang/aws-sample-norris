@@ -126,6 +126,7 @@ public class HudiApplication {
 					"    'topic' = '%s',\n" +
 					"    'properties.bootstrap.servers' = '%s',\n" +
 					"    'properties.group.id' = 'kafka_portfolio_pg_json_gid_001',\n" +
+					"    'scan.startup.mode' = 'earliest-offset',\n" +
 //					"     'properties.security.protocol' = 'SASL_SSL',\n"  +
 //					"     'properties.sasl.mechanism' = 'software.amazon.msk.auth.iam.IAMLoginModule required;',\n"  +
 //					"     'properties.sasl.client.callback.handler.class' = 'software.amazon.msk.auth.iam.IAMClientCallbackHandler',\n"  +
