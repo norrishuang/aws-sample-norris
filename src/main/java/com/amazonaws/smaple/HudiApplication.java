@@ -61,6 +61,7 @@ public class HudiApplication {
 		String kafkaTopic = parameter.get("kafka-topic", "AWSKafkaTutorialTopic");
 		String brokers = parameter.get("brokers", "");
 		String s3Path = parameter.get("s3Path", "");
+		String hiveMetaStore = parameter.get("hivemetastore", "");
 
 		if (applicationProperties != null) {
 			flinkProperties = applicationProperties.get("FlinkApplicationProperties");
@@ -70,24 +71,26 @@ public class HudiApplication {
 			kafkaTopic = flinkProperties.get("kafka-topic").toString();
 			brokers = flinkProperties.get("brokers").toString();
 			s3Path = flinkProperties.get("s3Path").toString();
+			hiveMetaStore = flinkProperties.get("hivemetastore").toString();
 		}
 
 		LOG.info("kafkaTopic is :" + kafkaTopic);
 		LOG.info("brokers is :" + brokers);
 		LOG.info("s3Path is :" + s3Path);
+		LOG.info("hiveMetaStore is :" + hiveMetaStore);
 
 		//Create Properties object for the Kafka consumer
 		Properties kafkaProps = new Properties();
 		kafkaProps.setProperty("bootstrap.servers", brokers);
 
 		//Process stream using sql API
-		KafkaHudiSqlExample.createAndDeployJob(env, kafkaTopic, s3Path , kafkaProps);
+		KafkaHudiSqlExample.createAndDeployJob(env, hiveMetaStore, kafkaTopic, s3Path , kafkaProps);
 	}
 
 
 	public static class KafkaHudiSqlExample {
 
-		public static void createAndDeployJob(StreamExecutionEnvironment env, String kafkaTopic, String s3Path, Properties kafkaProperties)  {
+		public static void createAndDeployJob(StreamExecutionEnvironment env,String hiveMetaSoreUris, String kafkaTopic, String s3Path, Properties kafkaProperties)  {
 			StreamTableEnvironment streamTableEnvironment = StreamTableEnvironment.create(
 					env, EnvironmentSettings.newInstance().build());
 
@@ -163,8 +166,9 @@ public class HudiApplication {
 					"    'hive_sync.db' = 'hudi',\n" +
 					"    'hive_sync.table' = 'customer_hudi_auto',\n" +
 					"    'hive_sync.mode' = 'hms',\n" +
+					"    'hive_sync.metastore.uris' = '"+ hiveMetaSoreUris +"',\n" +
 					"    'hive_sync.partition_fields' = 'reward',\n" +
-					"    'hive_sync.use_jdbc' = 'true',\n" +
+					"    'hive_sync.use_jdbc' = 'false',\n" +
 					"    'path' = '" + s3Path + "',\n" +
 					"    'table.type' = 'MERGE_ON_READ'\n" +
 					"    )";
