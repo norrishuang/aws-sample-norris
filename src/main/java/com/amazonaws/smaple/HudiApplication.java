@@ -161,11 +161,11 @@ public class HudiApplication {
 					"    'hive_sync.enable' = 'true',\n" +
 					"    'hive_sync.db' = 'hudi',\n" +
 					"    'hive_sync.table' = 'customer_hudi_auto',\n" +
-					"    'hive_sync.mode' = 'glue',\n" +
-					"    'hive_sync.partition_fields' = 'mktsegment',\n" +
-					"    'hive_sync.use_jdbc' = 'false',\n" +
+					"    'hive_sync.mode' = 'hms',\n" +
+					"    'hive_sync.partition_fields' = 'reward',\n" +
+					"    'hive_sync.use_jdbc' = 'true',\n" +
 					"    'path' = '" + s3Path + "',\n" +
-					"    'table.type' = 'MERGE_ON_READ' --  MERGE_ON_READ table or, by default is COPY_ON_WRITE\n" +
+					"    'table.type' = 'MERGE_ON_READ'\n" +
 					"    )";
 
 			streamTableEnvironment.executeSql(sinkKafkaDDL);
