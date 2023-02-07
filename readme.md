@@ -28,7 +28,7 @@
    | -------------------------- | ----------- | ------------------------------------------------------------ |
    | FlinkApplicationProperties | brokers     | MSK Boostrap Server                                          |
    | FlinkApplicationProperties | kafka-topic | 需要消费的topic name                                         |
-   | FlinkApplicationProperties | s3Path      | Hudi写入的S3目录（用s3a：例如s3a://<your bucket name>/data） |
+   | FlinkApplicationProperties | s3Path      | Hudi写入的S3目录（用s3a：例如s3a://[your bucket name]/data） |
 
    
 
