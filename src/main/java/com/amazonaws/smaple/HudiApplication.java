@@ -147,19 +147,14 @@ public class HudiApplication {
 					"        modify_time STRING,\n" +
 					"        create_time STRING,\n" +
 					"     PRIMARY KEY (id) NOT ENFORCED\n" +
-					"    ) PARTITIONED BY (`reward`)\n" +
+					"    ) \n" +
 					"    WITH (\n" +
 					"    'connector' = 'hudi',\n" +
 					"    'compaction.tasks'='1',\n" +
 					"    'changelog.enabled'='true',\n" +
-					"    'read.streaming.enabled' = 'true',\n" +
-					"    'read.streaming.skip_compaction' = 'true',\n" +
 					"    'write.task.max.size'='4096',\n" +
 					"    'write.bucket_assign.tasks'='1',\n" +
-					"    'compaction.delta_seconds'='120',\n" +
-					"    'compaction.delta_commits'='2',\n" +
-					"    'compaction.trigger.strategy'='num_or_time',\n" +
-					"    'compaction.max_memory'='2048',\n" +
+					"    'hoodie.embed.timeline.server'='false',\n" +
 					"    'write.merge.max_memory'='1024',\n" +
 					"    'write.tasks' = '1',\n" +
 					"    'hive_sync.enable' = 'true',\n" +

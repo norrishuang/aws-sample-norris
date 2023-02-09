@@ -24,12 +24,13 @@
 
 4. **Runtime properties** 配置如下
 
-   | Group                      | **Key**     | **Value**                                                    |
-   | -------------------------- | ----------- | ------------------------------------------------------------ |
-   | FlinkApplicationProperties | brokers     | MSK Boostrap Server                                          |
-   | FlinkApplicationProperties | kafka-topic | 需要消费的topic name                                         |
-   | FlinkApplicationProperties | s3Path      | Hudi写入的S3目录（用s3a：例如s3a://[your bucket name]/data） |
-
+   | Group                      | **Key**       | **Value**                                                    |
+   | -------------------------- | ------------- | ------------------------------------------------------------ |
+   | FlinkApplicationProperties | brokers       | MSK Boostrap Server                                          |
+   | FlinkApplicationProperties | kafka-topic   | 需要消费的topic name                                         |
+   | FlinkApplicationProperties | s3Path        | Hudi写入的S3目录（用s3a：例如s3a://[your bucket name]/data） |
+   | FlinkApplicationProperties | hivemetastore | 用于同步hive元数据的thriftserver                             |
+   
    
 
 保存配置后，点击【**Run**】

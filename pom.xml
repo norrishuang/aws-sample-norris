@@ -4,7 +4,7 @@
 
   <groupId>com.amazonaws.smaple</groupId>
   <artifactId>aws-sample-norris</artifactId>
-  <version>3.3-SNAPSHOT</version>
+  <version>3.7-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>FlinkCDCSample</name>
