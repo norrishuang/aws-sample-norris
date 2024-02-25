@@ -1,4 +1,4 @@
-### Flink CDC & Import Data to Hudi With KDA
+### Flink CDC & Import Data to Iceberg/Hudi With KDA
 
 [TOC]
 
