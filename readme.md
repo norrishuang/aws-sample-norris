@@ -2,15 +2,25 @@
 
 [TOC]
 
-### 代码说明：
+## 代码说明：
+本项目代码，可用于运行在 Amazon Kinesis Data Analytics 中。
 
-#### FlinkCDCPostgres
+### 1.FlinkCDCPostgres
 
 通过FlinkCDC实时采集Postgresql的数据，写入Kafka。
 
+### 2.IcebergApplication
 
+通过FlinkSQL，将mysql数据实时摄入 Iceberg。
+由于KDA与Iceberg集成存在问题参见 [#3044](https://github.com/apache/iceberg/issues/3044)。本项目提供 workround 解决该问题。
 
-#### HuidApplication
+**解决方案**
+1. 参考 pom.xml 文件，通过 **relocation** 将冲突的类替换。 
+2. 重写 **HadoopUtils** 类
+
+[参考](https://gist.github.com/mgmarino/19a4a26a40dfbc7f4249e3c567d32afa#file-hadooputils-java)
+
+### 3.HuidApplication
 
 消费Kafka的数据，以Hudi格式写入S3。MSK 先用无认证的模式。
 
