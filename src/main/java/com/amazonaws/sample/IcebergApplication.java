@@ -155,10 +155,10 @@ public class IcebergApplication {
 					"    PRIMARY KEY (id) NOT ENFORCED \n" +
 					") WITH ( \n" +
 					"    'connector' = 'mysql-cdc', \n" +
-					"    'hostname' = 'mysql-cdc-db.cghfgy0zyjlk.us-east-1.rds.amazonaws.com', \n" +
+					"    'hostname' = '{mysql-host}', \n" +
 					"    'port' = '3306', \n" +
-					"    'username' = 'admin', \n" +
-					"    'password' = 'Amazon123', \n" +
+					"    'username' = '{user}', \n" +
+					"    'password' = '{password}', \n" +
 					"    'database-name' = 'norrisdb', \n" +
 					"    'table-name' = 'customer_info' \n" +
 					")";
