@@ -99,9 +99,6 @@ public class IcebergApplication {
 
 			Configuration configuration = streamTableEnvironment.getConfig().getConfiguration();
 			configuration.setString("execution.checkpointing.interval", "1 min");
-////
-//			System.setProperty("AWS_ACCESS_KEY_ID", "AKIA32EODXL6ZBARKPPC");
-//			System.setProperty("AWS_SECRET_ACCESS_KEY", "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");
 
 //			final String createTableStmt = "CREATE TABLE IF NOT EXISTS CustomerTable (\n" +
 //					"  `event_time` TIMESTAMP(3) METADATA FROM 'value.source.timestamp' VIRTUAL,  -- from Debezium format\n" +
