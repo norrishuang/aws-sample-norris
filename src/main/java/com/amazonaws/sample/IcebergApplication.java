@@ -18,21 +18,22 @@
  * This file has been extended from the Apache Flink project skeleton.
  */
 
-package com.amazonaws.smaple;
+package com.amazonaws.sample;
 
 import com.amazonaws.services.kinesisanalytics.runtime.KinesisAnalyticsRuntime;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
-import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Properties;
+
 import java.util.Map;
+import java.util.Properties;
 
 /**
- * Skeleton for a Hudi Flink Streaming Job.
+ * Skeleton for a Iceberg Flink Streaming Job.
  *
  * <p>For a tutorial how to write a Flink streaming application, check the
  * tutorials and examples on the <a href="https://flink.apache.org/docs/stable/">Flink Website</a>.
@@ -61,18 +62,18 @@ public class IcebergApplication {
 //		String kafkaTopic = parameter.get("kafka-topic", "AWSKafkaTutorialTopic");
 //		String brokers = parameter.get("brokers", "");
 //		String s3Path = parameter.get("s3Path", "");
-//		String hiveMetaStore = parameter.get("hivemetastore", "");
+		String hiveMetaStore = parameter.get("hivemetastore", "");
 
 		if (applicationProperties != null) {
 			flinkProperties = applicationProperties.get("FlinkApplicationProperties");
 		}
 
-//		if (flinkProperties != null) {
+		if (flinkProperties != null) {
 //			kafkaTopic = flinkProperties.get("kafka-topic").toString();
 //			brokers = flinkProperties.get("brokers").toString();
 //			s3Path = flinkProperties.get("s3Path").toString();
-//			hiveMetaStore = flinkProperties.get("hivemetastore").toString();
-//		}
+			hiveMetaStore = flinkProperties.get("hivemetastore").toString();
+		}
 
 //		LOG.info("kafkaTopic is :" + kafkaTopic);
 //		LOG.info("brokers is :" + brokers);
@@ -84,18 +85,23 @@ public class IcebergApplication {
 //		kafkaProps.setProperty("bootstrap.servers", brokers);
 
 		//Process stream using sql API
-		CDCIcebergSqlExample.createAndDeployJob(env);
+		CDCIcebergSqlExample.createAndDeployJob(env, hiveMetaStore);
 	}
 
 
 	public static class CDCIcebergSqlExample {
 
-		public static void createAndDeployJob(StreamExecutionEnvironment env)  {
+		public static void createAndDeployJob(StreamExecutionEnvironment env, String hiveMetastoreUri)  {
 			StreamTableEnvironment streamTableEnvironment = StreamTableEnvironment.create(
 					env, EnvironmentSettings.newInstance().build());
 
+
+
 			Configuration configuration = streamTableEnvironment.getConfig().getConfiguration();
 			configuration.setString("execution.checkpointing.interval", "1 min");
+////
+//			System.setProperty("AWS_ACCESS_KEY_ID", "AKIA32EODXL6ZBARKPPC");
+//			System.setProperty("AWS_SECRET_ACCESS_KEY", "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");
 
 //			final String createTableStmt = "CREATE TABLE IF NOT EXISTS CustomerTable (\n" +
 //					"  `event_time` TIMESTAMP(3) METADATA FROM 'value.source.timestamp' VIRTUAL,  -- from Debezium format\n" +
@@ -114,25 +120,27 @@ public class IcebergApplication {
 //					"  'value.format' = 'debezium-json'\n" +
 //					")";
 
+
+			String warehousePath = "s3://emr-hive-us-east-1-812046859005/datalake/iceberg-folder";
 			//hive catalog
-//			final String icebergCatalog = String.format("CREATE CATALOG hive_catalog WITH (\n" +
-//					"   'type'='iceberg',\n" +
-//					"   'warehouse'='s3://myemr-bucket-01/data/iceberg-folder/',\n" +
-//					"   'catalog-impl'='hive',\n" +
-//					"   'clients'='5'," +
-//					"	'uri'='thrift://ip-10-192-11-165.ec2.internal:9083'" +
-//					" )");
+			final String icebergCatalog = String.format("CREATE CATALOG flink_catalog WITH (\n" +
+					"   'type'='iceberg',\n" +
+					"   'warehouse'='%s',\n" +
+					"   'catalog-impl'='hive',\n" +
+					"   'clients'='5'," +
+					"	'uri'='%s'" +
+					" )", warehousePath, hiveMetastoreUri);
 
 			//在KDA中使用Glue catalog 存在问题
-			final String icebergCatalog = String.format("CREATE CATALOG glue_catalog WITH (\n" +
-					"   'type'='iceberg',\n" +
-					"   'warehouse'='s3://myemr-bucket-01/data/iceberg-folder/',\n" +
-					"   'catalog-impl'='org.apache.iceberg.aws.glue.GlueCatalog',\n" +
-					"   'io-impl'='org.apache.iceberg.aws.s3.S3FileIO'\n" +
-					" )");
+//			final String icebergCatalog = String.format("CREATE CATALOG flink_catalog WITH ( \n" +
+//					"'type'='iceberg', \n" +
+//					"'warehouse'='%s', \n" +
+//					"'catalog-impl'='org.apache.iceberg.aws.glue.GlueCatalog', \n" +
+//					"'io-impl'='org.apache.iceberg.aws.s3.S3FileIO');", warehousePath);
+			LOG.info(icebergCatalog);
 			streamTableEnvironment.executeSql(icebergCatalog);
 
-			final String sourceSQL = String.format("CREATE TABLE default_catalog.default_database.customer_info \n" +
+			final String sourceSQL = "CREATE TABLE default_catalog.default_database.customer_info \n" +
 					"(\n" +
 					"    id BIGINT,\n" +
 					"    user_name STRING,\n" +
@@ -147,41 +155,42 @@ public class IcebergApplication {
 					"    PRIMARY KEY (id) NOT ENFORCED \n" +
 					") WITH ( \n" +
 					"    'connector' = 'mysql-cdc', \n" +
-					"    'hostname' = 'mysql-db-01-v8.cghfgy0zyjlk.us-east-1.rds.amazonaws.com', \n" +
+					"    'hostname' = 'mysql-cdc-db.cghfgy0zyjlk.us-east-1.rds.amazonaws.com', \n" +
 					"    'port' = '3306', \n" +
 					"    'username' = 'admin', \n" +
 					"    'password' = 'Amazon123', \n" +
 					"    'database-name' = 'norrisdb', \n" +
 					"    'table-name' = 'customer_info' \n" +
-					")");
+					")";
+
+			LOG.info(sourceSQL);
 			streamTableEnvironment.executeSql(sourceSQL);
 
-			final String s3Sink = "CREATE TABLE glue_catalog.iceberg_db.customer_info_flinksql(\n" +
-					"    id BIGINT,\n" +
-					"    user_name STRING,\n" +
-					"    country STRING,\n" +
-					"    province STRING,\n" +
-					"    city BIGINT,\n" +
-					"    street STRING,\n" +
-					"    street_name STRING,\n" +
-					"    created_at timestamp_ltz(3),\n" +
-					"    updated_at timestamp_ltz(3),\n" +
-					"    company STRING,\n" +
-					"    PRIMARY KEY (id) NOT ENFORCED)\n" +
-					"with(\n" +
-					"   'format-version'='2' \n" +
-//					"    'connector'='iceberg' \n" +
-//					"    'catalog-name'='hive_catalog',\n" +
-//					"    'catalog-database'='icebergdb',\n" +
-//					"    'catalog-table'='customer_info_flinksql',\n" +
-//					"    'catalog-impl'='org.apache.iceberg.aws.glue.GlueCatalog',\n" +
-//					"    'warehouse'='s3://myemr-bucket-01/data/iceberg-folder/'\n" +
-					")";
+			final String s3Sink = String.format("CREATE TABLE flink_catalog.iceberg_db.customer_info_flinksql_03 ( \n" +
+							"id BIGINT, \n" +
+							"user_name STRING, \n" +
+							"country STRING, \n" +
+							"province STRING, \n" +
+							"city BIGINT, \n" +
+							"street STRING, \n" +
+							"street_name STRING, \n" +
+							"created_at TIMESTAMP(3), \n" +
+							"updated_at TIMESTAMP(3), \n" +
+							"company STRING, \n" +
+							"PRIMARY KEY (id) NOT ENFORCED \n" +
+					") with ( \n" +
+					"'type'='iceberg', \n" +
+					"'warehouse'='%s', \n" +
+					"'catalog-name'='flink_catalog', \n" +
+					"'write.metadata.delete-after-commit.enabled'='true', \n" +
+					"'write.metadata.previous-versions-max'='5', \n" +
+					"'format-version'='2');", warehousePath);
+			LOG.info(s3Sink);
 
 			streamTableEnvironment.executeSql(s3Sink);
 
-			final String insertSql = "insert into glue_catalog.iceberg_db.customer_info_flinksql \n" +
-					"select * from default_catalog.default_database.customer_info";
+			final String insertSql = "insert into flink_catalog.iceberg_db.customer_info_flinksql_03 \n" +
+					"select * from default_catalog.default_database.customer_info;";
 			streamTableEnvironment.executeSql(insertSql);
 		}
 	}

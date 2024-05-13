@@ -1,4 +1,4 @@
-package com.amazonaws.smaple;
+package com.amazonaws.sample;
 
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;

@@ -18,18 +18,19 @@
  * This file has been extended from the Apache Flink project skeleton.
  */
 
-package com.amazonaws.smaple;
+package com.amazonaws.sample;
 
 import com.amazonaws.services.kinesisanalytics.runtime.KinesisAnalyticsRuntime;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
-import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Properties;
+
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Skeleton for a Hudi Flink Streaming Job.
