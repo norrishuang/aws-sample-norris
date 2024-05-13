@@ -12,7 +12,7 @@
 ### 2.IcebergApplication
 
 通过FlinkSQL，将mysql数据实时摄入 Iceberg。
-由于KDA与Iceberg集成存在问题，会遇到类似 ``java.lang.NoClassDefFoundError: org/apache/hadoop/conf/Configuration`` 这样的异常错误，可参见 [#3044](https://github.com/apache/iceberg/issues/3044)。本项目提供 workround 解决该问题。
+由于KDA与Iceberg集成存在问题，会遇到类似 ``java.lang.NoClassDefFoundError: org/apache/hadoop/conf/Configuration`` 这样的异常错误，可参见 [#3044](https://github.com/apache/iceberg/issues/3044)。本项目提供 workaround 解决该问题。
 
 **解决方案**
 1. 参考 pom.xml 文件，通过 **relocation** 将冲突的类替换。 
